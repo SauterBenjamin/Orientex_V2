@@ -1,5 +1,6 @@
 package com.example.orientex.ui.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.example.orientex.data.LoginRepository
 import com.example.orientex.data.Result
 
 import com.example.orientex.R
+import kotlin.math.log
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -41,11 +43,12 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     // A placeholder username validation check
     private fun isUserNameValid(username: String): Boolean {
-        return if (username.contains('@')) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
+        return if (username.contains('@')
+            && (username.endsWith("uwf.edu"))
+            && username.isNotBlank()) {
+                Patterns.EMAIL_ADDRESS.matcher(username).matches()
         }
+        else { false }
     }
 
     // A placeholder password validation check
