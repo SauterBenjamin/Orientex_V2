@@ -49,27 +49,26 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
-            println("userName")
 
         } else if (!isPasswordValid(password) && passwordLengthBool) {
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_length)
-            setPasswordLengthBool(true)
+            setPasswordLengthBool(false)
 
         } else if (!isPasswordValid(password) && upperCaseBool) {
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_capitalization)
-            setUpperCaseBool(true)
+            setUpperCaseBool(false)
 
         } else if (!isPasswordValid(password) && lowerCaseBool) {
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_capitalization)
-            setLowerCaseBool(true)
+            setLowerCaseBool(false)
 
         } else if (!isPasswordValid(password) && containsDigitBool) {
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_digit)
-            setContainsDigitBool(true)
+            setContainsDigitBool(false)
 
         } else if (!isPasswordValid(password) && containsSpecialCharacterBool) {
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_character)
-            setContainsSpecialCharacterBool(true)
+            setContainsSpecialCharacterBool(false)
 
         } else {
             _loginForm.value = LoginFormState(isDataValid = true)
