@@ -19,6 +19,21 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
+    private var passwordLengthBool = false
+    private fun setPasswordLengthBool (tempBool: Boolean) {passwordLengthBool = tempBool}
+
+    private var upperCaseBool = false
+    private fun setUpperCaseBool (tempBool: Boolean) {upperCaseBool = tempBool}
+
+    private var lowerCaseBool = false
+    private fun setLowerCaseBool (tempBool: Boolean) {lowerCaseBool = tempBool}
+
+    private var containsDigitBool = false
+    private fun setContainsDigitBool (tempBool: Boolean) {containsDigitBool = tempBool}
+
+    private var containsSpecialCharacterBool = false
+    private fun setContainsSpecialCharacterBool (tempBool: Boolean) {containsSpecialCharacterBool = tempBool}
+
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
@@ -34,8 +49,27 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
-        } else if (!isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
+
+        } else if (!isPasswordValid(password) && passwordLengthBool) {
+            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_length)
+            setPasswordLengthBool(false)
+
+        } else if (!isPasswordValid(password) && upperCaseBool) {
+            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_capitalization)
+            setUpperCaseBool(false)
+
+        } else if (!isPasswordValid(password) && lowerCaseBool) {
+            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_capitalization)
+            setLowerCaseBool(false)
+
+        } else if (!isPasswordValid(password) && containsDigitBool) {
+            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_digit)
+            setContainsDigitBool(false)
+
+        } else if (!isPasswordValid(password) && containsSpecialCharacterBool) {
+            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_character)
+            setContainsSpecialCharacterBool(false)
+
         } else {
             _loginForm.value = LoginFormState(isDataValid = true)
         }
@@ -53,6 +87,26 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5
+        if (password.length < 8) {
+            setPasswordLengthBool(true)
+            return false }
+
+        if (password.filter { it.isDigit() }.firstOrNull() == null) {
+            setContainsDigitBool(true)
+            return false }
+
+        if (password.filter { it.isLetter() }.filter { it.isUpperCase() }.firstOrNull() == null) {
+            setUpperCaseBool(true)
+            return false }
+
+        if (password.filter { it.isLetter() }.filter { it.isLowerCase() }.firstOrNull() == null) {
+            setLowerCaseBool(true)
+            return false }
+
+        if (password.filter { !it.isLetterOrDigit() }.firstOrNull() == null) {
+            setContainsSpecialCharacterBool(true)
+            return false }
+
+        return true
     }
 }
