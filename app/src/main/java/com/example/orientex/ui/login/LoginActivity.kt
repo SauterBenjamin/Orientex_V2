@@ -1,6 +1,7 @@
 package com.example.orientex.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,10 +9,12 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import com.example.orientex.IntroActivity
 import com.example.orientex.databinding.ActivityLoginBinding
 
 import com.example.orientex.R
@@ -101,12 +104,15 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
+        //TODO : set displayName to be the actual user's name
         // TODO : initiate successful logged in experience
-        Toast.makeText(
-            applicationContext,
+        startActivity(Intent(this@LoginActivity, IntroActivity::class.java))
+
+        val  toast = Toast.makeText(applicationContext,
             "$welcome $displayName",
-            Toast.LENGTH_LONG
-        ).show()
+            Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.TOP, 0, 150)
+            toast.show()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
