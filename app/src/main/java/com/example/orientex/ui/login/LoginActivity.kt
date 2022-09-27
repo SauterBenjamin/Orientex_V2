@@ -12,7 +12,6 @@ import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.orientex.IntroActivity
@@ -105,13 +104,21 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
+        //TODO : set displayName to be the actual user's name
         // TODO : initiate successful logged in experience
         startActivity(Intent(this@LoginActivity, IntroActivity::class.java))
-        Toast.makeText(
-            applicationContext,
+
+        val  toast = Toast.makeText(applicationContext,
             "$welcome $displayName",
-            Toast.LENGTH_LONG
-        ).show()
+            Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.TOP, 0, 150)
+            toast.show()
+//            Toast.LENGTH_LONG )
+//        Toast.makeText(
+//            applicationContext,
+//            "$welcome $displayName",
+//            Toast.LENGTH_LONG
+//        ).show()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
