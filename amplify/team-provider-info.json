@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-orientexv2-dev-123409-authRole",
+      "UnauthRoleArn": "arn:aws:iam::319495318717:role/amplify-orientexv2-dev-123409-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::319495318717:role/amplify-orientexv2-dev-123409-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-orientexv2-dev-123409-deployment",
+      "UnauthRoleName": "amplify-orientexv2-dev-123409-unauthRole",
+      "StackName": "amplify-orientexv2-dev-123409",
+      "StackId": "arn:aws:cloudformation:us-east-2:319495318717:stack/amplify-orientexv2-dev-123409/98a98990-3e8a-11ed-ae42-069783cd740c",
+      "AmplifyAppId": "d2gxq8z85vffpo"
+    }
+  }
+}
