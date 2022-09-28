@@ -111,8 +111,8 @@ class LoginActivity : AppCompatActivity() {
         val  toast = Toast.makeText(applicationContext,
             "$welcome $displayName",
             Toast.LENGTH_LONG)
-            toast.setGravity(Gravity.TOP, 0, 150)
-            toast.show()
+        toast.setGravity(Gravity.TOP, 0, 150)
+        toast.show()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
