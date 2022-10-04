@@ -10,6 +10,11 @@
       "StackName": "amplify-orientexv2-dev-123409",
       "StackId": "arn:aws:cloudformation:us-east-2:319495318717:stack/amplify-orientexv2-dev-123409/98a98990-3e8a-11ed-ae42-069783cd740c",
       "AmplifyAppId": "d2gxq8z85vffpo"
+    },
+    "categories": {
+      "auth": {
+        "orientexv248c7ee3a": {}
+      }
     }
   }
 }
