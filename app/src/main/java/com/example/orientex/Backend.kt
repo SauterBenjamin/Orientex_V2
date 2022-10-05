@@ -2,6 +2,7 @@ package com.example.orientex
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.service.autofill.UserData
 import android.util.Log
 import com.amplifyframework.AmplifyException
@@ -15,10 +16,14 @@ import com.amplifyframework.core.Amplify
 import com.amplifyframework.core.InitializationStatus
 import com.amplifyframework.hub.HubChannel
 import com.amplifyframework.hub.HubEvent
+import com.example.orientex.ui.login.LoginViewModel
 
 object Backend {
 
     private const val TAG = "Backend"
+
+    private lateinit var loginViewModel: LoginViewModel
+
 
     fun initialize(applicationContext: Context) : Backend {
         try {
@@ -74,8 +79,17 @@ object Backend {
         return this
     }
 
+    // TODO: Testing
+    // pass the data from web redirect to Amplify libs
+    fun handleWebUISignInResponse(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d(TAG, "received requestCode : $requestCode and resultCode : $resultCode")
+        if (requestCode == AWSCognitoAuthPlugin.WEB_UI_SIGN_IN_ACTIVITY_CODE) {
+            Amplify.Auth.handleWebUISignInResponse(data)
+        }
+    }
+
     private fun updateUserData(withSignedInStatus : Boolean) {
-        UserData.setSignedIn(withSignedInStatus)
+        loginViewModel.setSignedIn(withSignedInStatus)
     }
 
     fun signOut() {

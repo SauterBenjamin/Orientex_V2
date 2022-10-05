@@ -19,6 +19,14 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
+    private val _isSignedIn = MutableLiveData<Boolean>(false)
+    var isSignedIn: LiveData<Boolean> = _isSignedIn
+
+    fun setSignedIn(newValue : Boolean) {
+        // use postvalue() to make the assignation on the main (UI) thread
+        _isSignedIn.postValue(newValue)
+    }
+
     private var passwordLengthBool = false
     private fun setPasswordLengthBool (tempBool: Boolean) {passwordLengthBool = tempBool}
 
