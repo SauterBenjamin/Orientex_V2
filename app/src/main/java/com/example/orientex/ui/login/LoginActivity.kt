@@ -64,13 +64,13 @@ class LoginActivity : AppCompatActivity() {
             val options = AuthSignUpOptions.builder()
                 .userAttribute(AuthUserAttributeKey.email(), "bs104@students.uwf.edu")
                 .build()
-            Amplify.Auth.signUp("bs104", "Password123", options,
+            Amplify.Auth.signUp("bs104@students.uwf.edu", "Password123", options,
                 { Log.i("AuthQuickStart", "Sign up succeeded: $it") },
                 { Log.e ("AuthQuickStart", "Sign up failed", it) }
             )
 
             Amplify.Auth.confirmSignUp(
-                "bs104", "the code you received via email",
+                "bs104@students.uwf.edu", "the code you received via email",
                 { result ->
                     if (result.isSignUpComplete) {
                         Log.i("AuthQuickstart", "Confirm signUp succeeded")
