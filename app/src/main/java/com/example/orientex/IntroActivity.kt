@@ -33,10 +33,4 @@ class IntroActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
-
-    // TODO: Testing
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Backend.handleWebUISignInResponse(requestCode, resultCode, data)
-    }
 }

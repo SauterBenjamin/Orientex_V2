@@ -1,7 +1,6 @@
 package com.example.orientex.ui.login
 
 import android.app.Activity
-import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -9,31 +8,30 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Gravity
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import com.example.orientex.Backend
-import com.example.orientex.IntroActivity
+import com.amplifyframework.AmplifyException
+import com.amplifyframework.auth.AuthUserAttributeKey
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
+import com.amplifyframework.auth.options.AuthSignUpOptions
+import com.amplifyframework.core.Amplify
 import com.example.orientex.databinding.ActivityLoginBinding
-
 import com.example.orientex.R
 
 class LoginActivity : AppCompatActivity() {
-
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
 
-    // TODO: Testing
-    // receive the web redirect after authentication
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Backend.handleWebUISignInResponse(requestCode, resultCode, data)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Amplify.Auth.fetchAuthSession(
+            { Log.i("AmplifyQuickstart", "Auth session = $it") },
+            { error -> Log.e("AmplifyQuickstart", "Failed to fetch auth session", error) }
+        )
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -61,8 +59,29 @@ class LoginActivity : AppCompatActivity() {
         })
 
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
-            val loginResult = it ?: return@Observer
+            //val loginResult = it ?: return@Observer
 
+            val options = AuthSignUpOptions.builder()
+                .userAttribute(AuthUserAttributeKey.email(), "bs104@students.uwf.edu")
+                .build()
+            Amplify.Auth.signUp("bs104", "Password123", options,
+                { Log.i("AuthQuickStart", "Sign up succeeded: $it") },
+                { Log.e ("AuthQuickStart", "Sign up failed", it) }
+            )
+
+            Amplify.Auth.confirmSignUp(
+                "bs104", "the code you received via email",
+                { result ->
+                    if (result.isSignUpComplete) {
+                        Log.i("AuthQuickstart", "Confirm signUp succeeded")
+                    } else {
+                        Log.i("AuthQuickstart","Confirm sign up not complete")
+                    }
+                },
+                { Log.e("AuthQuickstart", "Failed to confirm sign up", it) }
+            )
+
+            /*
             loading.visibility = View.GONE
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
@@ -74,6 +93,7 @@ class LoginActivity : AppCompatActivity() {
 
             //Complete and destroy login activity once successful
             finish()
+             */
         })
 
         username.afterTextChanged {
@@ -112,15 +132,12 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
-        //TODO : set displayName to be the actual user's name
         // TODO : initiate successful logged in experience
-        startActivity(Intent(this@LoginActivity, IntroActivity::class.java))
-
-        val  toast = Toast.makeText(applicationContext,
+        Toast.makeText(
+            applicationContext,
             "$welcome $displayName",
-            Toast.LENGTH_LONG)
-        toast.setGravity(Gravity.TOP, 0, 150)
-        toast.show()
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
