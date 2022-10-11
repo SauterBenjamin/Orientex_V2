@@ -13,7 +13,8 @@
     <string name="invalid_password_digit">Password must be contain at least 1 digit</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_intro">IntroActivity</string>
+    <string name="uwf_logo">UWF Logo</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_quests">Quests</string>
+    <string name="title_profile">Profile</string>
 </resources>

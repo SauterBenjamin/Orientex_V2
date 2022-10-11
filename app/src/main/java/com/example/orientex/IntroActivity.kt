@@ -1,6 +1,5 @@
 package com.example.orientex
 
-import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +26,7 @@ class IntroActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_quests, R.id.navigation_home, R.id.navigation_profile
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
