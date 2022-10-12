@@ -13,7 +13,14 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import com.amazonaws.auth.AWSCognitoIdentityProvider
+import com.amazonaws.auth.AWSIdentityProvider
+import com.amazonaws.services.cognitoidentity.model.CognitoIdentityProvider
+import com.amazonaws.services.cognitoidentityprovider.model.AdminGetUserRequest
+import com.amazonaws.services.cognitoidentityprovider.model.AdminGetUserResult
+import com.amazonaws.services.cognitoidentityprovider.model.CreateIdentityProviderResult
 import com.amplifyframework.AmplifyException
+import com.amplifyframework.auth.AuthException.UserNotFoundException
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.auth.options.AuthSignUpOptions
@@ -60,6 +67,23 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             //val loginResult = it ?: return@Observer
+
+            try {
+                //TODO: Getting AWS to check for email
+
+                val getUserRequest = AdminGetUserRequest()
+                getUserRequest.userPoolId = "cognitoPoolId"
+                getUserRequest.username = username.toString()
+
+                val id = CreateIdentityProviderResult()
+                val idClient = CognitoIdentityProvider()
+
+                val getUserResult = AdminGetUserResult()
+                Log.e("AuthQuickStart", "User Found")
+            }
+            catch (UserNotFoundException: UserNotFoundException) {
+                Log.e("AuthQuickStart", UserNotFoundException.toString())
+            }
 
             val options = AuthSignUpOptions.builder()
                 .userAttribute(AuthUserAttributeKey.email(), "bs104@students.uwf.edu")
