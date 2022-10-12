@@ -13,6 +13,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import com.amazonaws.auth.AWSBasicCognitoIdentityProvider
 import com.amazonaws.auth.AWSCognitoIdentityProvider
 import com.amazonaws.auth.AWSIdentityProvider
 import com.amazonaws.services.cognitoidentity.model.CognitoIdentityProvider
@@ -20,6 +21,8 @@ import com.amazonaws.services.cognitoidentityprovider.model.AdminGetUserRequest
 import com.amazonaws.services.cognitoidentityprovider.model.AdminGetUserResult
 import com.amazonaws.services.cognitoidentityprovider.model.CreateIdentityProviderResult
 import com.amplifyframework.AmplifyException
+import com.amplifyframework.auth.AuthException
+import com.amplifyframework.auth.AuthException.NotAuthorizedException
 import com.amplifyframework.auth.AuthException.UserNotFoundException
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
@@ -68,41 +71,31 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             //val loginResult = it ?: return@Observer
 
+            /*
             try {
-                //TODO: Getting AWS to check for email
-
                 val getUserRequest = AdminGetUserRequest()
-                getUserRequest.userPoolId = "cognitoPoolId"
-                getUserRequest.username = username.toString()
+                getUserRequest.userPoolId = "us-east-2_MjdwZQaJR"
+                getUserRequest.username = "bs104@students.uwf.edu"
 
-                val id = CreateIdentityProviderResult()
-                val idClient = CognitoIdentityProvider()
+                val iDProvider = AWSBasicCognitoIdentityProvider("319495318717", "us-east-2_MjdwZQaJR")
 
-                val getUserResult = AdminGetUserResult()
-                Log.e("AuthQuickStart", "User Found")
+                getUserResult = AdminGetUserResult(getUserRequest)
             }
-            catch (UserNotFoundException: UserNotFoundException) {
-                Log.e("AuthQuickStart", UserNotFoundException.toString())
-            }
+            */
 
-            val options = AuthSignUpOptions.builder()
-                .userAttribute(AuthUserAttributeKey.email(), "bs104@students.uwf.edu")
-                .build()
-            Amplify.Auth.signUp("bs104@students.uwf.edu", "Password123", options,
-                { Log.i("AuthQuickStart", "Sign up succeeded: $it") },
-                { Log.e ("AuthQuickStart", "Sign up failed", it) }
-            )
 
-            Amplify.Auth.confirmSignUp(
-                "bs104@students.uwf.edu", "the code you received via email",
+            Amplify.Auth.signIn(username.text.toString(), password.toString(),
                 { result ->
-                    if (result.isSignUpComplete) {
-                        Log.i("AuthQuickstart", "Confirm signUp succeeded")
+                    if (result.isSignInComplete) {
+                        Log.i("AuthQuickstart", "Sign in succeeded")
                     } else {
-                        Log.i("AuthQuickstart","Confirm sign up not complete")
+                        Log.i("AuthQuickstart", "Sign in not complete")
                     }
                 },
-                { Log.e("AuthQuickstart", "Failed to confirm sign up", it) }
+                {
+                    registerUser(username.text.toString(), password.toString())
+                    confirmUser(username.text.toString())
+                }
             )
 
             /*
@@ -151,6 +144,30 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
+    }
+
+    private fun registerUser(username: String, password: String)  {
+        val options = AuthSignUpOptions.builder()
+            .userAttribute(AuthUserAttributeKey.email(), username)
+            .build()
+        Amplify.Auth.signUp(username, password, options,
+            { Log.i("AuthQuickStart", "Sign up succeeded: $it") },
+            { Log.e ("AuthQuickStart", "Sign up failed", it) }
+        )
+    }
+
+    private fun confirmUser(username: String)   {
+        Amplify.Auth.confirmSignUp(
+            username, "328192",
+            { result ->
+                if (result.isSignUpComplete) {
+                    Log.i("AuthQuickstart", "Confirm signUp succeeded")
+                } else {
+                    Log.i("AuthQuickstart","Confirm sign up not complete")
+                }
+            },
+            { Log.e("AuthQuickstart", "Failed to confirm sign up", it) }
+        )
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
