@@ -16,7 +16,6 @@ import android.widget.EditText
 import android.widget.Toast
 import com.example.orientex.IntroActivity
 import com.example.orientex.databinding.ActivityLoginBinding
-
 import com.example.orientex.R
 
 class LoginActivity : AppCompatActivity() {
